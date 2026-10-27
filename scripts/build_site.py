@@ -43,6 +43,11 @@ RAW_THUMBS = f"https://raw.githubusercontent.com/{USER}/{REPO}/gh-pages/thumbs"
 THUMB_WIDTH = 480
 SUFFIXES = (".jpg", ".jpeg", ".png", ".webp", ".gif")
 
+try:  # Pillow is what CI uses: a wheel, no apt step to hang on.
+    from PIL import Image, ImageOps
+except ImportError:  # local fallback, ImageMagick
+    Image = None
+
 IM = shutil.which("magick") or shutil.which("convert")
 IDENTIFY = shutil.which("identify")
 
@@ -55,19 +60,31 @@ def image_files(category: Path) -> list[str]:
 
 
 def dimensions(paths: list[Path]) -> dict[str, tuple[int, int]]:
-    if not paths or not IDENTIFY:
+    if not paths:
+        return {}
+    sizes = {}
+    if Image is not None:
+        for path in paths:
+            with Image.open(path) as im:
+                sizes[path.name] = im.size
+        return sizes
+    if not IDENTIFY:
         return {}
     out = subprocess.run(
         [IDENTIFY, "-format", "%w %h\n", *map(str, paths)],
         capture_output=True, text=True, check=True,
     ).stdout.split()
-    sizes = {}
     for path, w, h in zip(paths, out[0::2], out[1::2]):
         sizes[path.name] = (int(w), int(h))
     return sizes
 
 
 def webp_supported() -> bool:
+    if Image is not None:
+        from PIL import features
+        return features.check("webp")
+    if not IM:
+        return False
     out = subprocess.run([IM, "-list", "format"], capture_output=True, text=True)
     for line in out.stdout.splitlines():
         if line.strip().upper().startswith("WEBP"):
@@ -82,6 +99,19 @@ def make_thumb(src: Path, dst: Path, clean: bool) -> None:
     if not clean and dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
         return
     dst.parent.mkdir(parents=True, exist_ok=True)
+
+    if Image is not None:
+        with Image.open(src) as im:
+            im = ImageOps.exif_transpose(im)
+            im.thumbnail((THUMB_WIDTH, THUMB_WIDTH), Image.LANCZOS)
+            if im.mode not in ("RGB", "RGBA"):
+                im = im.convert("RGBA" if im.mode in ("P", "LA", "PA") else "RGB")
+            if THUMB_EXT == "webp":
+                im.save(dst, "WEBP", quality=78, method=4)
+            else:
+                im.convert("RGB").save(dst, "JPEG", quality=82, optimize=True)
+        return
+
     quality = "78" if THUMB_EXT == "webp" else "82"
     subprocess.run(
         [IM, f"{src}[0]", "-auto-orient", "-thumbnail", f"{THUMB_WIDTH}x{THUMB_WIDTH}>",
@@ -450,8 +480,8 @@ def check_site() -> list[str]:
 
 
 def main() -> int:
-    if not IM:
-        print("ImageMagick not found (magick/convert)", file=sys.stderr)
+    if Image is None and not IM:
+        print("need Pillow (pip install pillow) or ImageMagick", file=sys.stderr)
         return 1
 
     clean = "--clean" in sys.argv
