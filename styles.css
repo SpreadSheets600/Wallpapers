@@ -1,92 +1,140 @@
+:root {
+  --bg: #0b0b0f;
+  --surface: #14141b;
+  --line: #262630;
+  --text: #e8e8ef;
+  --muted: #9a9aa8;
+  --accent: #a6e3a1;
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
 body {
-    font-family: 'JetBrains Mono', monospace;
-    margin: 0;
-    padding: 20px;
-    line-height: 1.6;
+  margin: 0;
+  padding: 48px 24px 96px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  width: min(1180px, 100%);
+  margin: 0 auto;
 }
 
 header {
-    text-align: center;
-    margin-bottom: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 32px;
 }
 
 h1 {
-    font-size: 2.5em;
-    margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
-main {
-    max-width: 1200px;
-    margin: 0 auto;
+h1 a { color: inherit; text-decoration: none; }
+
+.sub {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
 }
+
+.sub a { color: var(--accent); text-decoration: none; }
 
 .categories {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
 }
 
-.category-button {
-    display: block;
-    padding: 15px 20px;
-    background: #f0f0f0;
-    border: 1px solid #ddd;
-    text-align: center;
-    text-decoration: none;
-    color: #000;
-    border-radius: 4px;
-    transition: background-color 0.2s;
+.category {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  aspect-ratio: 16 / 10;
 }
 
-.category-button:hover {
-    background: #e0e0e0;
+.category img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.72;
+  transition: opacity 0.25s ease, transform 0.4s ease;
 }
 
-.image-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
+.category:hover img,
+.category:focus-visible img { opacity: 1; transform: scale(1.04); }
+
+.category .label {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 32px 14px 12px;
+  background: linear-gradient(transparent, rgba(5, 5, 9, 0.92));
+  font-size: 0.95rem;
 }
 
-.image-card {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 4px;
+.category .count { color: var(--muted); font-size: 0.8rem; }
+
+.grid {
+  columns: 4 260px;
+  column-gap: 16px;
 }
 
-.image-card .thumbnail {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 2px;
-    cursor: pointer;
+.grid figure {
+  margin: 0 0 16px;
+  break-inside: avoid;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
 }
 
-.image-card .title {
-    margin: 10px 0;
-    font-size: 0.9em;
-    text-align: center;
+.grid img {
+  width: 100%;
+  display: block;
+  transition: opacity 0.2s ease;
 }
+
+.grid a:hover img { opacity: 0.8; }
 
 footer {
-    text-align: center;
-    margin-top: 40px;
-    padding: 20px;
-    font-size: 0.9em;
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
 }
 
-.back-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #000;
-    text-decoration: none;
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
+footer a { color: var(--muted); }
 
-.back-link:hover {
-    background: #f0f0f0;
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
 }

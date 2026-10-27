@@ -1,209 +1,22 @@
-# 📁 Flowers Wallpapers
+# Flowers
 
-Collection of 185 wallpapers in the Flowers category.
+[&larr; all categories](../README.md)
 
-## 📊 Category Statistics
-- **Number of Wallpapers:** 185
-- **Total Size:** 291.45 MB
-- **Last Updated:** 2025-05-12 09:50:02 UTC
+`42` images &middot; `77.6 MB`
 
-## 📑 Navigation
-- [⬆️ Back to Main Collection](../../README.md)
+|  |  |  |  |
+|---|---|---|---|
+| <a href="1.jpg"><img src="1.jpg" width="220" alt="Flowers 1.jpg"></a> | <a href="2.jpg"><img src="2.jpg" width="220" alt="Flowers 2.jpg"></a> | <a href="3.jpg"><img src="3.jpg" width="220" alt="Flowers 3.jpg"></a> | <a href="4.jpg"><img src="4.jpg" width="220" alt="Flowers 4.jpg"></a> |
+| <a href="5.jpg"><img src="5.jpg" width="220" alt="Flowers 5.jpg"></a> | <a href="6.jpg"><img src="6.jpg" width="220" alt="Flowers 6.jpg"></a> | <a href="7.png"><img src="7.png" width="220" alt="Flowers 7.png"></a> | <a href="8.png"><img src="8.png" width="220" alt="Flowers 8.png"></a> |
+| <a href="9.jpg"><img src="9.jpg" width="220" alt="Flowers 9.jpg"></a> | <a href="10.png"><img src="10.png" width="220" alt="Flowers 10.png"></a> | <a href="11.jpg"><img src="11.jpg" width="220" alt="Flowers 11.jpg"></a> | <a href="12.jpg"><img src="12.jpg" width="220" alt="Flowers 12.jpg"></a> |
+| <a href="13.jpg"><img src="13.jpg" width="220" alt="Flowers 13.jpg"></a> | <a href="14.jpg"><img src="14.jpg" width="220" alt="Flowers 14.jpg"></a> | <a href="15.jpg"><img src="15.jpg" width="220" alt="Flowers 15.jpg"></a> | <a href="16.jpg"><img src="16.jpg" width="220" alt="Flowers 16.jpg"></a> |
+| <a href="17.jpg"><img src="17.jpg" width="220" alt="Flowers 17.jpg"></a> | <a href="18.jpg"><img src="18.jpg" width="220" alt="Flowers 18.jpg"></a> | <a href="19.jpg"><img src="19.jpg" width="220" alt="Flowers 19.jpg"></a> | <a href="20.png"><img src="20.png" width="220" alt="Flowers 20.png"></a> |
+| <a href="21.jpg"><img src="21.jpg" width="220" alt="Flowers 21.jpg"></a> | <a href="22.jpg"><img src="22.jpg" width="220" alt="Flowers 22.jpg"></a> | <a href="23.jpg"><img src="23.jpg" width="220" alt="Flowers 23.jpg"></a> | <a href="24.png"><img src="24.png" width="220" alt="Flowers 24.png"></a> |
+| <a href="25.jpg"><img src="25.jpg" width="220" alt="Flowers 25.jpg"></a> | <a href="26.png"><img src="26.png" width="220" alt="Flowers 26.png"></a> | <a href="27.jpg"><img src="27.jpg" width="220" alt="Flowers 27.jpg"></a> | <a href="28.jpg"><img src="28.jpg" width="220" alt="Flowers 28.jpg"></a> |
+| <a href="29.jpg"><img src="29.jpg" width="220" alt="Flowers 29.jpg"></a> | <a href="30.jpg"><img src="30.jpg" width="220" alt="Flowers 30.jpg"></a> | <a href="31.jpg"><img src="31.jpg" width="220" alt="Flowers 31.jpg"></a> | <a href="32.jpg"><img src="32.jpg" width="220" alt="Flowers 32.jpg"></a> |
+| <a href="33.jpg"><img src="33.jpg" width="220" alt="Flowers 33.jpg"></a> | <a href="34.jpg"><img src="34.jpg" width="220" alt="Flowers 34.jpg"></a> | <a href="35.jpg"><img src="35.jpg" width="220" alt="Flowers 35.jpg"></a> | <a href="36.jpg"><img src="36.jpg" width="220" alt="Flowers 36.jpg"></a> |
+| <a href="37.jpg"><img src="37.jpg" width="220" alt="Flowers 37.jpg"></a> | <a href="38.jpg"><img src="38.jpg" width="220" alt="Flowers 38.jpg"></a> | <a href="39.jpg"><img src="39.jpg" width="220" alt="Flowers 39.jpg"></a> | <a href="40.png"><img src="40.png" width="220" alt="Flowers 40.png"></a> |
+| <a href="41.png"><img src="41.png" width="220" alt="Flowers 41.png"></a> | <a href="42.png"><img src="42.png" width="220" alt="Flowers 42.png"></a> |  |  |
 
-## 📋 Wallpaper List
-
-| Thumbnail | File Name | Size (MB) |
-|-----------|-----------|-----------|
-| ![](1.jpg) | [1.jpg](1.jpg) | 0.22 |
-| ![](10.jpg) | [10.jpg](10.jpg) | 0.34 |
-| ![](100.png) | [100.png](100.png) | 0.65 |
-| ![](101.jpg) | [101.jpg](101.jpg) | 0.08 |
-| ![](102.png) | [102.png](102.png) | 7.06 |
-| ![](103.jpg) | [103.jpg](103.jpg) | 0.62 |
-| ![](104.jpg) | [104.jpg](104.jpg) | 0.06 |
-| ![](105.jpg) | [105.jpg](105.jpg) | 0.24 |
-| ![](106.jpg) | [106.jpg](106.jpg) | 0.35 |
-| ![](107.jpg) | [107.jpg](107.jpg) | 5.18 |
-| ![](108.jpg) | [108.jpg](108.jpg) | 0.06 |
-| ![](109.jpg) | [109.jpg](109.jpg) | 1.42 |
-| ![](11.jpg) | [11.jpg](11.jpg) | 1.29 |
-| ![](110.jpg) | [110.jpg](110.jpg) | 0.2 |
-| ![](111.jpg) | [111.jpg](111.jpg) | 0.43 |
-| ![](112.jpg) | [112.jpg](112.jpg) | 0.72 |
-| ![](113.jpg) | [113.jpg](113.jpg) | 1.04 |
-| ![](114.jpg) | [114.jpg](114.jpg) | 1.13 |
-| ![](115.jpg) | [115.jpg](115.jpg) | 5.92 |
-| ![](116.jpg) | [116.jpg](116.jpg) | 1.14 |
-| ![](117.png) | [117.png](117.png) | 15.21 |
-| ![](118.jpg) | [118.jpg](118.jpg) | 0.25 |
-| ![](119.jpg) | [119.jpg](119.jpg) | 1.69 |
-| ![](12.jpg) | [12.jpg](12.jpg) | 0.63 |
-| ![](120.jpg) | [120.jpg](120.jpg) | 0.23 |
-| ![](121.jpg) | [121.jpg](121.jpg) | 1.75 |
-| ![](122.jpg) | [122.jpg](122.jpg) | 0.86 |
-| ![](123.jpg) | [123.jpg](123.jpg) | 8.48 |
-| ![](124.jpg) | [124.jpg](124.jpg) | 0.14 |
-| ![](125.jpg) | [125.jpg](125.jpg) | 1.13 |
-| ![](126.jpg) | [126.jpg](126.jpg) | 0.8 |
-| ![](127.jpg) | [127.jpg](127.jpg) | 1.07 |
-| ![](128.jpg) | [128.jpg](128.jpg) | 0.59 |
-| ![](129.jpg) | [129.jpg](129.jpg) | 1.24 |
-| ![](13.jpg) | [13.jpg](13.jpg) | 0.24 |
-| ![](130.jpg) | [130.jpg](130.jpg) | 0.54 |
-| ![](131.jpg) | [131.jpg](131.jpg) | 2.91 |
-| ![](132.jpg) | [132.jpg](132.jpg) | 0.82 |
-| ![](133.jpg) | [133.jpg](133.jpg) | 0.31 |
-| ![](134.jpg) | [134.jpg](134.jpg) | 0.7 |
-| ![](135.jpg) | [135.jpg](135.jpg) | 1.44 |
-| ![](136.png) | [136.png](136.png) | 1.75 |
-| ![](137.jpg) | [137.jpg](137.jpg) | 3.0 |
-| ![](138.jpg) | [138.jpg](138.jpg) | 0.83 |
-| ![](139.jpg) | [139.jpg](139.jpg) | 1.39 |
-| ![](14.jpg) | [14.jpg](14.jpg) | 0.99 |
-| ![](140.jpg) | [140.jpg](140.jpg) | 0.38 |
-| ![](141.jpg) | [141.jpg](141.jpg) | 2.79 |
-| ![](142.jpg) | [142.jpg](142.jpg) | 0.14 |
-| ![](143.jpg) | [143.jpg](143.jpg) | 1.52 |
-| ![](144.jpg) | [144.jpg](144.jpg) | 0.29 |
-| ![](145.jpg) | [145.jpg](145.jpg) | 0.83 |
-| ![](146.jpg) | [146.jpg](146.jpg) | 2.68 |
-| ![](147.png) | [147.png](147.png) | 4.38 |
-| ![](148.jpg) | [148.jpg](148.jpg) | 3.08 |
-| ![](149.jpeg) | [149.jpeg](149.jpeg) | 1.1 |
-| ![](15.jpg) | [15.jpg](15.jpg) | 0.33 |
-| ![](150.jpg) | [150.jpg](150.jpg) | 2.07 |
-| ![](151.jpg) | [151.jpg](151.jpg) | 4.13 |
-| ![](152.jpg) | [152.jpg](152.jpg) | 0.84 |
-| ![](153.jpg) | [153.jpg](153.jpg) | 0.41 |
-| ![](154.jpg) | [154.jpg](154.jpg) | 0.4 |
-| ![](155.png) | [155.png](155.png) | 2.83 |
-| ![](156.jpg) | [156.jpg](156.jpg) | 3.21 |
-| ![](157.png) | [157.png](157.png) | 6.6 |
-| ![](158.jpg) | [158.jpg](158.jpg) | 0.5 |
-| ![](159.jpg) | [159.jpg](159.jpg) | 0.85 |
-| ![](16.jpg) | [16.jpg](16.jpg) | 0.8 |
-| ![](160.jpg) | [160.jpg](160.jpg) | 3.0 |
-| ![](161.jpg) | [161.jpg](161.jpg) | 3.63 |
-| ![](162.jpg) | [162.jpg](162.jpg) | 1.23 |
-| ![](163.jpg) | [163.jpg](163.jpg) | 5.14 |
-| ![](164.jpeg) | [164.jpeg](164.jpeg) | 2.67 |
-| ![](165.jpeg) | [165.jpeg](165.jpeg) | 0.33 |
-| ![](166.jpg) | [166.jpg](166.jpg) | 0.62 |
-| ![](167.jpg) | [167.jpg](167.jpg) | 2.36 |
-| ![](168.jpg) | [168.jpg](168.jpg) | 0.58 |
-| ![](169.jpg) | [169.jpg](169.jpg) | 0.84 |
-| ![](17.jpg) | [17.jpg](17.jpg) | 2.69 |
-| ![](170.jpg) | [170.jpg](170.jpg) | 1.07 |
-| ![](171.jpg) | [171.jpg](171.jpg) | 3.71 |
-| ![](172.jpg) | [172.jpg](172.jpg) | 2.21 |
-| ![](173.jpg) | [173.jpg](173.jpg) | 0.9 |
-| ![](174.jpg) | [174.jpg](174.jpg) | 0.64 |
-| ![](175.jpg) | [175.jpg](175.jpg) | 0.34 |
-| ![](176.jpg) | [176.jpg](176.jpg) | 2.15 |
-| ![](177.jpg) | [177.jpg](177.jpg) | 1.39 |
-| ![](178.jpg) | [178.jpg](178.jpg) | 10.36 |
-| ![](179.jpg) | [179.jpg](179.jpg) | 1.49 |
-| ![](18.jpg) | [18.jpg](18.jpg) | 3.79 |
-| ![](180.jpg) | [180.jpg](180.jpg) | 0.49 |
-| ![](181.jpg) | [181.jpg](181.jpg) | 0.51 |
-| ![](182.jpg) | [182.jpg](182.jpg) | 0.11 |
-| ![](183.png) | [183.png](183.png) | 3.55 |
-| ![](184.png) | [184.png](184.png) | 13.93 |
-| ![](185.png) | [185.png](185.png) | 6.06 |
-| ![](19.jpg) | [19.jpg](19.jpg) | 0.37 |
-| ![](2.jpg) | [2.jpg](2.jpg) | 0.31 |
-| ![](20.jpg) | [20.jpg](20.jpg) | 14.33 |
-| ![](21.jpg) | [21.jpg](21.jpg) | 0.44 |
-| ![](22.jpg) | [22.jpg](22.jpg) | 0.25 |
-| ![](23.png) | [23.png](23.png) | 0.02 |
-| ![](24.jpg) | [24.jpg](24.jpg) | 0.21 |
-| ![](25.jpg) | [25.jpg](25.jpg) | 0.34 |
-| ![](26.jpg) | [26.jpg](26.jpg) | 0.3 |
-| ![](27.jpg) | [27.jpg](27.jpg) | 1.18 |
-| ![](28.jpg) | [28.jpg](28.jpg) | 15.93 |
-| ![](29.jpg) | [29.jpg](29.jpg) | 2.31 |
-| ![](3.jpg) | [3.jpg](3.jpg) | 0.2 |
-| ![](30.jpg) | [30.jpg](30.jpg) | 0.24 |
-| ![](31.jpg) | [31.jpg](31.jpg) | 0.53 |
-| ![](32.jpg) | [32.jpg](32.jpg) | 0.7 |
-| ![](33.png) | [33.png](33.png) | 6.94 |
-| ![](34.png) | [34.png](34.png) | 12.15 |
-| ![](35.jpg) | [35.jpg](35.jpg) | 0.01 |
-| ![](36.jpg) | [36.jpg](36.jpg) | 0.01 |
-| ![](37.jpg) | [37.jpg](37.jpg) | 0.35 |
-| ![](38.jpg) | [38.jpg](38.jpg) | 0.01 |
-| ![](39.jpg) | [39.jpg](39.jpg) | 0.01 |
-| ![](4.jpg) | [4.jpg](4.jpg) | 0.29 |
-| ![](40.jpg) | [40.jpg](40.jpg) | 0.02 |
-| ![](41.jpg) | [41.jpg](41.jpg) | 0.01 |
-| ![](42.jpg) | [42.jpg](42.jpg) | 0.01 |
-| ![](43.jpg) | [43.jpg](43.jpg) | 0.01 |
-| ![](44.jpg) | [44.jpg](44.jpg) | 0.02 |
-| ![](45.jpg) | [45.jpg](45.jpg) | 0.01 |
-| ![](46.jpg) | [46.jpg](46.jpg) | 0.01 |
-| ![](47.jpg) | [47.jpg](47.jpg) | 0.01 |
-| ![](48.jpg) | [48.jpg](48.jpg) | 1.61 |
-| ![](49.jpg) | [49.jpg](49.jpg) | 0.01 |
-| ![](5.jpg) | [5.jpg](5.jpg) | 0.33 |
-| ![](50.jpg) | [50.jpg](50.jpg) | 0.01 |
-| ![](51.jpg) | [51.jpg](51.jpg) | 0.01 |
-| ![](52.jpg) | [52.jpg](52.jpg) | 0.01 |
-| ![](53.jpg) | [53.jpg](53.jpg) | 0.0 |
-| ![](54.jpg) | [54.jpg](54.jpg) | 0.01 |
-| ![](55.jpg) | [55.jpg](55.jpg) | 0.01 |
-| ![](56.jpg) | [56.jpg](56.jpg) | 0.01 |
-| ![](57.jpg) | [57.jpg](57.jpg) | 0.01 |
-| ![](58.jpg) | [58.jpg](58.jpg) | 0.01 |
-| ![](59.jpg) | [59.jpg](59.jpg) | 0.34 |
-| ![](6.jpg) | [6.jpg](6.jpg) | 0.93 |
-| ![](60.jpg) | [60.jpg](60.jpg) | 0.01 |
-| ![](61.jpg) | [61.jpg](61.jpg) | 0.01 |
-| ![](62.jpg) | [62.jpg](62.jpg) | 0.01 |
-| ![](63.jpg) | [63.jpg](63.jpg) | 0.02 |
-| ![](64.jpg) | [64.jpg](64.jpg) | 0.01 |
-| ![](65.jpg) | [65.jpg](65.jpg) | 0.01 |
-| ![](66.jpg) | [66.jpg](66.jpg) | 0.01 |
-| ![](67.jpg) | [67.jpg](67.jpg) | 0.02 |
-| ![](68.jpg) | [68.jpg](68.jpg) | 0.03 |
-| ![](69.jpg) | [69.jpg](69.jpg) | 0.01 |
-| ![](7.jpg) | [7.jpg](7.jpg) | 2.49 |
-| ![](70.jpg) | [70.jpg](70.jpg) | 0.47 |
-| ![](71.jpg) | [71.jpg](71.jpg) | 0.01 |
-| ![](72.jpg) | [72.jpg](72.jpg) | 0.03 |
-| ![](73.jpg) | [73.jpg](73.jpg) | 0.01 |
-| ![](74.jpg) | [74.jpg](74.jpg) | 0.01 |
-| ![](75.png) | [75.png](75.png) | 0.0 |
-| ![](76.jpg) | [76.jpg](76.jpg) | 0.01 |
-| ![](77.jpg) | [77.jpg](77.jpg) | 0.01 |
-| ![](78.jpg) | [78.jpg](78.jpg) | 0.01 |
-| ![](79.jpg) | [79.jpg](79.jpg) | 0.02 |
-| ![](8.jpg) | [8.jpg](8.jpg) | 0.3 |
-| ![](80.jpg) | [80.jpg](80.jpg) | 0.01 |
-| ![](81.jpg) | [81.jpg](81.jpg) | 1.04 |
-| ![](82.jpg) | [82.jpg](82.jpg) | 0.01 |
-| ![](83.jpg) | [83.jpg](83.jpg) | 0.02 |
-| ![](84.jpg) | [84.jpg](84.jpg) | 0.01 |
-| ![](85.png) | [85.png](85.png) | 0.15 |
-| ![](86.png) | [86.png](86.png) | 0.13 |
-| ![](87.jpg) | [87.jpg](87.jpg) | 0.84 |
-| ![](88.jpg) | [88.jpg](88.jpg) | 4.0 |
-| ![](89.jpg) | [89.jpg](89.jpg) | 0.06 |
-| ![](9.jpg) | [9.jpg](9.jpg) | 0.51 |
-| ![](90.jpg) | [90.jpg](90.jpg) | 5.87 |
-| ![](91.jpg) | [91.jpg](91.jpg) | 0.84 |
-| ![](92.jpg) | [92.jpg](92.jpg) | 1.64 |
-| ![](93.jpg) | [93.jpg](93.jpg) | 1.29 |
-| ![](94.jpg) | [94.jpg](94.jpg) | 4.08 |
-| ![](95.jpg) | [95.jpg](95.jpg) | 2.03 |
-| ![](96.jpg) | [96.jpg](96.jpg) | 5.92 |
-| ![](97.jpg) | [97.jpg](97.jpg) | 4.48 |
-| ![](98.jpg) | [98.jpg](98.jpg) | 1.03 |
-| ![](99.jpg) | [99.jpg](99.jpg) | 0.06 |
-
-
-## 🔄 Update Information
-- **Updated at:** 2025-05-12 09:50:02 UTC
-- **Updated by:** [SpreadSheets600](https://github.com/SpreadSheets600)
-
----
-Generated by [SpreadSheets600](https://github.com/SpreadSheets600)'s Wallpaper Collection Manager
+Every wallpaper belongs to its original creator. See the
+[main README](../README.md#credits) for credits and takedown requests.
