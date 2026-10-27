@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import html
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -420,12 +421,12 @@ def build_category(name: str, images: list[str], sizes: dict[str, tuple[int, int
         full = f"{RAW}/{name}/{image}"
         shots.append(
             f'''  <a href="{html.escape(full)}" data-full="{html.escape(full)}" data-name="{html.escape(name)} {html.escape(image)}">
-    <img src="../../thumbs/{name}/{thumb}" width="{w}" height="{h}" alt="{html.escape(name)} {html.escape(image)}" loading="lazy" decoding="async">
+    <img src="../thumbs/{name}/{thumb}" width="{w}" height="{h}" alt="{html.escape(name)} {html.escape(image)}" loading="lazy" decoding="async">
   </a>'''
         )
     body = f'''<header>
-  <h1><a href="../../index.html">{html.escape(name)}</a></h1>
-  <p class="sub">{len(images)} images &middot; <a href="../../index.html">all categories</a></p>
+  <h1><a href="../index.html">{html.escape(name)}</a></h1>
+  <p class="sub">{len(images)} images &middot; <a href="../index.html">all categories</a></p>
 </header>
 
 <main class="grid">
@@ -433,7 +434,19 @@ def build_category(name: str, images: list[str], sizes: dict[str, tuple[int, int
 </main>
 {LIGHTBOX}
 '''
-    return page(f"{name} wallpapers", body, 2, f"<script>{JS}</script>")
+    return page(f"{name} wallpapers", body, 1, f"<script>{JS}</script>")
+
+
+def check_site() -> list[str]:
+    """Fail the build if a page points at a file that was not generated."""
+    missing = []
+    for page in SITE.rglob("index.html"):
+        for ref in re.findall(r'(?:src|href)="([^"]+)"', page.read_text(encoding="utf-8")):
+            if ref.startswith(("http://", "https://", "#", "mailto:")):
+                continue
+            if not (page.parent / ref).resolve().exists():
+                missing.append(f"{page.relative_to(SITE)}: {ref}")
+    return missing
 
 
 def main() -> int:
@@ -473,6 +486,13 @@ def main() -> int:
     (SITE / "styles.css").write_text(CSS, encoding="utf-8")
     (SITE / "index.html").write_text(build_index(cats, covers), encoding="utf-8")
     (SITE / ".nojekyll").write_text("", encoding="utf-8")
+
+    missing = check_site()
+    if missing:
+        print("broken links:", file=sys.stderr)
+        for line in missing[:20]:
+            print("  " + line, file=sys.stderr)
+        return 1
 
     print(f"built {len(cats)} categories, {made} thumbnails ({THUMB_EXT}) -> {SITE}")
     print("preview: python3 -m http.server -d _site 8000")
