@@ -16,7 +16,8 @@ Full-size images are not copied. They are linked straight from the repository
 through raw.githubusercontent.com, so the site stays small and the thumbnails
 are the only thing a visitor downloads while browsing.
 
-ImageMagick is required (``magick`` or ``convert`` on PATH).
+Thumbnails are made with Pillow (``pip install pillow``), or with
+ImageMagick (``magick``/``convert``) when Pillow is not installed.
 """
 
 from __future__ import annotations

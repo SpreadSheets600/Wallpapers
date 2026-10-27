@@ -85,9 +85,10 @@ The push is all you need: the workflow regenerates the READMEs, the thumbnails
 and the site, commits the READMEs back here and force-pushes a fresh `gh-pages`
 branch.
 
-To preview the site locally:
+To preview the site locally (Pillow or ImageMagick needed):
 
 ```bash
+python3 -m pip install --user pillow
 python3 scripts/build_site.py
 python3 -m http.server -d _site 8000
 ```
