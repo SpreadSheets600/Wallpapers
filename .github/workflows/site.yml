@@ -1,0 +1,59 @@
+name: site
+
+on:
+  push:
+    branches: ["master"]
+    paths:
+      - "Wallpapers/**"
+      - "scripts/**"
+      - ".github/workflows/site.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ImageMagick
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick webp
+
+      - name: Build thumbnails and site
+        run: python3 scripts/build_site.py
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_message: "site: ${{ github.sha }}"
+
+      # After the deploy, the thumbnails exist on gh-pages, so the READMEs can
+      # point at them instead of embedding multi-megabyte originals.
+      - name: Rebuild READMEs
+        run: python3 scripts/build_readme.py
+
+      - name: Commit READMEs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md Wallpapers/*/README.md
+          if git diff --cached --quiet; then
+            echo "READMEs already up to date"
+          else
+            git commit -m "docs: rebuild READMEs [skip ci]"
+            git push
+          fi

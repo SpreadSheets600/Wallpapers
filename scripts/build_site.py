@@ -1,98 +1,170 @@
 #!/usr/bin/env python3
-"""Build the static gallery in ``index.html`` + ``styles.css``.
+"""Build the gallery into ``_site/``.
 
 Usage:
-    python3 scripts/build_site.py
+    python3 scripts/build_site.py            # build
+    python3 scripts/build_site.py --clean    # rebuild thumbnails from scratch
 
-The output is plain HTML/CSS with no build step, so GitHub Pages can serve the
-repository as-is. One page per category plus a landing page with a cover image
-for each category.
+The output is what gets published to the ``gh-pages`` branch:
+
+    _site/index.html              landing page, one card per category
+    _site/styles.css              shared stylesheet
+    _site/<Category>/index.html   thumbnail grid with a lightbox
+    _site/thumbs/<Category>/*.webp  480 px thumbnails
+
+Full-size images are not copied. They are linked straight from the repository
+through raw.githubusercontent.com, so the site stays small and the thumbnails
+are the only thing a visitor downloads while browsing.
+
+ImageMagick is required (``magick`` or ``convert`` on PATH).
 """
 
 from __future__ import annotations
 
 import html
 import os
+import shutil
+import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGES = ROOT / "Wallpapers"
+SITE = ROOT / "_site"
+THUMBS = SITE / "thumbs"
+
+USER = "SpreadSheets600"
+REPO = "Wallpapers"
+BRANCH = "master"
+RAW = f"https://raw.githubusercontent.com/{USER}/{REPO}/{BRANCH}/Wallpapers"
+RAW_THUMBS = f"https://raw.githubusercontent.com/{USER}/{REPO}/gh-pages/thumbs"
+
+THUMB_WIDTH = 480
 SUFFIXES = (".jpg", ".jpeg", ".png", ".webp", ".gif")
+
+IM = shutil.which("magick") or shutil.which("convert")
+IDENTIFY = shutil.which("identify")
+
+
+def image_files(category: Path) -> list[str]:
+    return sorted(
+        (f.name for f in category.iterdir() if f.suffix.lower() in SUFFIXES),
+        key=lambda n: (0, int(Path(n).stem)) if Path(n).stem.isdigit() else (1, n),
+    )
+
+
+def dimensions(paths: list[Path]) -> dict[str, tuple[int, int]]:
+    if not paths or not IDENTIFY:
+        return {}
+    out = subprocess.run(
+        [IDENTIFY, "-format", "%w %h\n", *map(str, paths)],
+        capture_output=True, text=True, check=True,
+    ).stdout.split()
+    sizes = {}
+    for path, w, h in zip(paths, out[0::2], out[1::2]):
+        sizes[path.name] = (int(w), int(h))
+    return sizes
+
+
+def webp_supported() -> bool:
+    out = subprocess.run([IM, "-list", "format"], capture_output=True, text=True)
+    for line in out.stdout.splitlines():
+        if line.strip().upper().startswith("WEBP"):
+            return "rw" in line or " rw" in line
+    return False
+
+
+THUMB_EXT = "webp" if webp_supported() else "jpg"
+
+
+def make_thumb(src: Path, dst: Path, clean: bool) -> None:
+    if not clean and dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
+        return
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    quality = "78" if THUMB_EXT == "webp" else "82"
+    subprocess.run(
+        [IM, f"{src}[0]", "-auto-orient", "-thumbnail", f"{THUMB_WIDTH}x{THUMB_WIDTH}>",
+         "-strip", "-quality", quality, str(dst)],
+        check=True, capture_output=True,
+    )
+
+
+def categories() -> list[tuple[str, list[str], int]]:
+    result = []
+    for path in sorted(p for p in IMAGES.iterdir() if p.is_dir()):
+        images = image_files(path)
+        if not images:
+            continue
+        size = sum((path / n).stat().st_size for n in images)
+        result.append((path.name, images, size))
+    return result
+
 
 CSS = """\
 :root {
-  --bg: #0b0b0f;
-  --surface: #14141b;
-  --line: #262630;
-  --text: #e8e8ef;
-  --muted: #9a9aa8;
+  --bg: #0a0a0d;
+  --surface: #131319;
+  --line: #24242e;
+  --text: #ececf2;
+  --muted: #8f8f9e;
   --accent: #a6e3a1;
 }
 
 * { box-sizing: border-box; }
 
-html { color-scheme: dark; }
+html { color-scheme: dark; scrollbar-color: #33333f var(--bg); }
 
 body {
   margin: 0;
-  padding: 48px 24px 96px;
+  padding: 40px 20px 80px;
   background: var(--bg);
   color: var(--text);
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 15px;
-  line-height: 1.6;
+  font: 15px/1.6 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   -webkit-font-smoothing: antialiased;
 }
 
-.wrap {
-  width: min(1180px, 100%);
-  margin: 0 auto;
-}
+.wrap { width: min(1240px, 100%); margin: 0 auto; }
 
 header {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 20px;
+  gap: 8px 16px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--line);
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 h1 {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  margin: 0;
+  font-size: clamp(1.4rem, 3.4vw, 2rem);
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin: 0;
 }
 
 h1 a { color: inherit; text-decoration: none; }
 
-.sub {
-  color: var(--muted);
-  font-size: 0.85rem;
-  margin: 0;
-}
-
+.sub { margin: 0; color: var(--muted); font-size: 0.82rem; }
 .sub a { color: var(--accent); text-decoration: none; }
+.sub a:hover { text-decoration: underline; }
 
 .categories {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
 }
 
 .category {
   position: relative;
   display: block;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--surface);
-  text-decoration: none;
   color: inherit;
-  aspect-ratio: 16 / 10;
+  text-decoration: none;
 }
 
 .category img {
@@ -100,12 +172,11 @@ h1 a { color: inherit; text-decoration: none; }
   height: 100%;
   object-fit: cover;
   display: block;
-  opacity: 0.72;
-  transition: opacity 0.25s ease, transform 0.4s ease;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, transform 0.35s ease;
 }
 
-.category:hover img,
-.category:focus-visible img { opacity: 1; transform: scale(1.04); }
+.category:hover img, .category:focus-visible img { opacity: 1; transform: scale(1.03); }
 
 .category .label {
   position: absolute;
@@ -113,71 +184,185 @@ h1 a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px;
-  padding: 32px 14px 12px;
-  background: linear-gradient(transparent, rgba(5, 5, 9, 0.92));
-  font-size: 0.95rem;
+  padding: 26px 12px 10px;
+  background: linear-gradient(transparent, rgba(4, 4, 8, 0.9));
+  font-size: 0.92rem;
 }
 
-.category .count { color: var(--muted); font-size: 0.8rem; }
+.category .count { color: var(--muted); font-size: 0.78rem; }
 
 .grid {
-  columns: 4 260px;
-  column-gap: 16px;
+  columns: 4 250px;
+  column-gap: 12px;
 }
 
-.grid figure {
-  margin: 0 0 16px;
+.grid a {
+  display: block;
+  margin: 0 0 12px;
   break-inside: avoid;
+  content-visibility: auto;
+  contain-intrinsic-size: 250px 160px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   background: var(--surface);
 }
 
 .grid img {
   width: 100%;
+  height: auto;
   display: block;
   transition: opacity 0.2s ease;
 }
 
-.grid a:hover img { opacity: 0.8; }
+.grid a:hover img, .grid a:focus-visible img { opacity: 0.82; }
 
 footer {
-  margin-top: 56px;
-  padding-top: 20px;
+  margin-top: 48px;
+  padding-top: 18px;
   border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.8rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 footer a { color: var(--muted); }
 
+/* lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  place-items: center;
+  padding: 3vmin;
+  background: rgba(4, 4, 8, 0.94);
+  backdrop-filter: blur(3px);
+}
+
+.lightbox[open] { display: grid; }
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.lightbox .bar {
+  position: fixed;
+  inset: auto 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 14px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.lightbox button {
+  font: inherit;
+  color: var(--text);
+  background: #1b1b24;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.lightbox button:hover { border-color: var(--accent); color: var(--accent); }
+
+.lightbox .spinner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+  * { transition: none !important; animation: none !important; }
 }
 """
 
+JS = """\
+(() => {
+  const box = document.getElementById('lightbox');
+  if (!box) return;
+  const img = box.querySelector('img');
+  const spinner = box.querySelector('.spinner');
+  const counter = box.querySelector('.counter');
+  const open = box.querySelector('.open');
+  const links = [...document.querySelectorAll('.grid a')];
+  let index = 0;
 
-def categories() -> list[tuple[str, list[str], int]]:
-    result = []
-    for path in sorted(p for p in IMAGES.iterdir() if p.is_dir()):
-        images = sorted(
-            (f.name for f in path.iterdir() if f.suffix.lower() in SUFFIXES),
-            key=lambda name: (0, int(Path(name).stem)) if Path(name).stem.isdigit() else (1, name),
-        )
-        if not images:
-            continue
-        size = sum((path / name).stat().st_size for name in images)
-        result.append((path.name, images, size))
-    return result
+  const show = (i) => {
+    index = (i + links.length) % links.length;
+    const link = links[index];
+    spinner.hidden = false;
+    img.style.visibility = 'hidden';
+    img.src = link.dataset.full;
+    img.alt = link.dataset.name;
+    counter.textContent = `${index + 1} / ${links.length}`;
+    open.href = link.dataset.full;
+    box.setAttribute('open', '');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const close = () => {
+    box.removeAttribute('open');
+    img.removeAttribute('src');
+    document.body.style.overflow = '';
+  };
+
+  img.addEventListener('load', () => {
+    spinner.hidden = true;
+    img.style.visibility = 'visible';
+  });
+
+  links.forEach((link, i) => link.addEventListener('click', (e) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    show(i);
+  }));
+
+  box.querySelector('.prev').addEventListener('click', () => show(index - 1));
+  box.querySelector('.next').addEventListener('click', () => show(index + 1));
+  box.querySelector('.close').addEventListener('click', close);
+  box.addEventListener('click', (e) => { if (e.target === box) close(); });
+  addEventListener('keydown', (e) => {
+    if (!box.hasAttribute('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(index - 1);
+    if (e.key === 'ArrowRight') show(index + 1);
+  });
+})();
+"""
+
+LIGHTBOX = """\
+<div class="lightbox" id="lightbox">
+  <div class="spinner"></div>
+  <img alt="">
+  <div class="bar">
+    <button class="prev" aria-label="previous">←</button>
+    <span class="counter"></span>
+    <a class="open" target="_blank" rel="noopener">original ↗</a>
+    <button class="next" aria-label="next">→</button>
+    <button class="close" aria-label="close">close</button>
+  </div>
+</div>"""
 
 
-def page(title: str, body: str, depth: int) -> str:
+def page(title: str, body: str, depth: int, script: str = "") -> str:
     prefix = "../" * depth
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -185,6 +370,7 @@ def page(title: str, body: str, depth: int) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)}</title>
+<meta name="color-scheme" content="dark">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.0/index.min.css">
 <link rel="stylesheet" href="{prefix}styles.css">
@@ -194,28 +380,29 @@ def page(title: str, body: str, depth: int) -> str:
 {body}
 <footer>
   <span>All wallpapers belong to their original creators.</span>
-  <span><a href="https://github.com/SpreadSheets600/Wallpapers">github.com/SpreadSheets600/Wallpapers</a></span>
+  <span><a href="https://github.com/{USER}/{REPO}">github.com/{USER}/{REPO}</a></span>
 </footer>
 </div>
+{script}
 </body>
 </html>
 """
 
 
-def build_index(cats) -> str:
+def build_index(cats, covers: dict[str, str]) -> str:
     total = sum(len(images) for _, images, _ in cats)
-    size = sum(size for _, _, size in cats)
+    size = sum(s for _, _, s in cats) / 1048576
     cards = []
     for name, images, _ in cats:
         cards.append(
-            f'''  <a class="category" href="Wallpapers/{name}/">
-    <img src="Wallpapers/{name}/{images[0]}" alt="{html.escape(name)}" loading="lazy">
+            f'''  <a class="category" href="{name}/">
+    <img src="thumbs/{name}/{covers[name]}" width="250" height="156" alt="{html.escape(name)}" loading="lazy">
     <span class="label">{html.escape(name)}<span class="count">{len(images)}</span></span>
   </a>'''
         )
     body = f'''<header>
   <h1>wallpapers</h1>
-  <p class="sub">{total} images &middot; {size / 1048576:.0f} MB &middot; {len(cats)} categories</p>
+  <p class="sub">{total} images &middot; {size:.0f} MB &middot; {len(cats)} categories</p>
 </header>
 
 <main class="categories">
@@ -225,12 +412,16 @@ def build_index(cats) -> str:
     return page("Wallpapers", body, 0)
 
 
-def build_category(name: str, images: list[str]) -> str:
-    figures = []
+def build_category(name: str, images: list[str], sizes: dict[str, tuple[int, int]]) -> str:
+    shots = []
     for image in images:
-        figures.append(
-            f'''  <figure><a href="{image}" target="_blank" rel="noopener">'''
-            f'''<img src="{image}" alt="{html.escape(name)} {html.escape(image)}" loading="lazy"></a></figure>'''
+        thumb = f"{Path(image).stem}.{THUMB_EXT}"
+        w, h = sizes.get(image, (1920, 1080))
+        full = f"{RAW}/{name}/{image}"
+        shots.append(
+            f'''  <a href="{html.escape(full)}" data-full="{html.escape(full)}" data-name="{html.escape(name)} {html.escape(image)}">
+    <img src="../../thumbs/{name}/{thumb}" width="{w}" height="{h}" alt="{html.escape(name)} {html.escape(image)}" loading="lazy" decoding="async">
+  </a>'''
         )
     body = f'''<header>
   <h1><a href="../../index.html">{html.escape(name)}</a></h1>
@@ -238,20 +429,55 @@ def build_category(name: str, images: list[str]) -> str:
 </header>
 
 <main class="grid">
-{os.linesep.join(figures)}
+{os.linesep.join(shots)}
 </main>
+{LIGHTBOX}
 '''
-    return page(f"{name} wallpapers", body, 2)
+    return page(f"{name} wallpapers", body, 2, f"<script>{JS}</script>")
 
 
-def main() -> None:
+def main() -> int:
+    if not IM:
+        print("ImageMagick not found (magick/convert)", file=sys.stderr)
+        return 1
+
+    clean = "--clean" in sys.argv
+    if SITE.exists():
+        if clean:
+            shutil.rmtree(SITE)
+        else:
+            for entry in SITE.iterdir():
+                if entry.name == "thumbs":
+                    continue
+                shutil.rmtree(entry) if entry.is_dir() else entry.unlink()
+    SITE.mkdir(exist_ok=True)
+
     cats = categories()
-    (ROOT / "styles.css").write_text(CSS, encoding="utf-8")
-    (ROOT / "index.html").write_text(build_index(cats), encoding="utf-8")
+    covers = {}
+    made = 0
     for name, images, _ in cats:
-        (IMAGES / name / "index.html").write_text(build_category(name, images), encoding="utf-8")
-    print(f"built index.html + {len(cats)} category pages")
+        paths = [IMAGES / name / image for image in images]
+        for path in paths:
+            thumb = THUMBS / name / f"{path.stem}.{THUMB_EXT}"
+            make_thumb(path, thumb, clean)
+            made += 1
+        covers[name] = f"{Path(images[0]).stem}.{THUMB_EXT}"
+
+    for name, images, _ in cats:
+        sizes = dimensions([IMAGES / name / image for image in images])
+        (SITE / name).mkdir(exist_ok=True)
+        (SITE / name / "index.html").write_text(
+            build_category(name, images, sizes), encoding="utf-8"
+        )
+
+    (SITE / "styles.css").write_text(CSS, encoding="utf-8")
+    (SITE / "index.html").write_text(build_index(cats, covers), encoding="utf-8")
+    (SITE / ".nojekyll").write_text("", encoding="utf-8")
+
+    print(f"built {len(cats)} categories, {made} thumbnails ({THUMB_EXT}) -> {SITE}")
+    print("preview: python3 -m http.server -d _site 8000")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
