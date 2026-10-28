@@ -4,11 +4,11 @@
 Usage:
     python3 scripts/organize.py
 
-Every image in ``Wallpapers/<Category>/`` ends up numbered 1..n so the
-directory listing, the READMEs and the site stay in sync. Existing numbers are
-kept and new files get the next free number, in the order they are found.
-HEIC/HEIF files are converted to JPEG because most desktop environments cannot
-set them as a wallpaper.
+Every image in ``Wallpapers/`` ends up numbered 1..n so the directory listing,
+the README and the site stay in sync. Existing numbers are kept and new files
+get the next free number, in the order they are found. HEIC/HEIF files are
+converted to JPEG because most desktop environments cannot set them as a
+wallpaper.
 """
 
 from __future__ import annotations
@@ -39,27 +39,25 @@ def main() -> int:
         print(f"no Wallpapers/ directory in {ROOT}", file=sys.stderr)
         return 1
 
-    for category in sorted(p for p in IMAGES.iterdir() if p.is_dir()):
-        files = [f for f in sorted(category.iterdir()) if f.is_file()]
-        for file in files:
-            if file.suffix.lower() in HEIC:
-                convert_heic(file)
+    for file in sorted(IMAGES.iterdir()):
+        if file.is_file() and file.suffix.lower() in HEIC:
+            convert_heic(file)
 
-        files = [
-            f for f in sorted(category.iterdir())
-            if f.is_file() and f.suffix.lower() in SUFFIXES
-        ]
-        numbered = [f for f in files if f.stem.isdigit()]
-        loose = [f for f in files if not f.stem.isdigit()]
-        if not loose:
-            continue
+    files = [
+        f for f in sorted(IMAGES.iterdir())
+        if f.is_file() and f.suffix.lower() in SUFFIXES
+    ]
+    numbered = [f for f in files if f.stem.isdigit()]
+    loose = [f for f in files if not f.stem.isdigit()]
+    if not loose:
+        return 0
 
-        next_number = max((int(f.stem) for f in numbered), default=0) + 1
-        for file in loose:
-            target = category / f"{next_number}{file.suffix.lower()}"
-            file.rename(target)
-            print(f"{category.name}: {file.name} -> {target.name}")
-            next_number += 1
+    next_number = max((int(f.stem) for f in numbered), default=0) + 1
+    for file in loose:
+        target = IMAGES / f"{next_number}{file.suffix.lower()}"
+        file.rename(target)
+        print(f"{file.name} -> {target.name}")
+        next_number += 1
 
     return 0
 

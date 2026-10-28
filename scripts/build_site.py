@@ -7,10 +7,9 @@ Usage:
 
 The output is what gets published to the ``gh-pages`` branch:
 
-    _site/index.html              landing page, one card per category
-    _site/styles.css              shared stylesheet
-    _site/<Category>/index.html   thumbnail grid with a lightbox
-    _site/thumbs/<Category>/*.webp  480 px thumbnails
+    _site/index.html            thumbnail grid with a lightbox
+    _site/styles.css            shared stylesheet
+    _site/thumbs/*.webp         480 px thumbnails
 
 Full-size images are not copied. They are linked straight from the repository
 through raw.githubusercontent.com, so the site stays small and the thumbnails
@@ -39,7 +38,6 @@ USER = "SpreadSheets600"
 REPO = "Wallpapers"
 BRANCH = "master"
 RAW = f"https://raw.githubusercontent.com/{USER}/{REPO}/{BRANCH}/Wallpapers"
-RAW_THUMBS = f"https://raw.githubusercontent.com/{USER}/{REPO}/gh-pages/thumbs"
 
 THUMB_WIDTH = 480
 SUFFIXES = (".jpg", ".jpeg", ".png", ".webp", ".gif")
@@ -53,9 +51,9 @@ IM = shutil.which("magick") or shutil.which("convert")
 IDENTIFY = shutil.which("identify")
 
 
-def image_files(category: Path) -> list[str]:
+def image_files() -> list[str]:
     return sorted(
-        (f.name for f in category.iterdir() if f.suffix.lower() in SUFFIXES),
+        (f.name for f in IMAGES.iterdir() if f.suffix.lower() in SUFFIXES),
         key=lambda n: (0, int(Path(n).stem)) if Path(n).stem.isdigit() else (1, n),
     )
 
@@ -121,17 +119,6 @@ def make_thumb(src: Path, dst: Path, clean: bool) -> None:
     )
 
 
-def categories() -> list[tuple[str, list[str], int]]:
-    result = []
-    for path in sorted(p for p in IMAGES.iterdir() if p.is_dir()):
-        images = image_files(path)
-        if not images:
-            continue
-        size = sum((path / n).stat().st_size for n in images)
-        result.append((path.name, images, size))
-    return result
-
-
 CSS = """\
 :root {
   --bg: #0a0a0d;
@@ -180,48 +167,6 @@ h1 a { color: inherit; text-decoration: none; }
 .sub { margin: 0; color: var(--muted); font-size: 0.82rem; }
 .sub a { color: var(--accent); text-decoration: none; }
 .sub a:hover { text-decoration: underline; }
-
-.categories {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 14px;
-}
-
-.category {
-  position: relative;
-  display: block;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface);
-  color: inherit;
-  text-decoration: none;
-}
-
-.category img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  opacity: 0.75;
-  transition: opacity 0.2s ease, transform 0.35s ease;
-}
-
-.category:hover img, .category:focus-visible img { opacity: 1; transform: scale(1.03); }
-
-.category .label {
-  position: absolute;
-  inset: auto 0 0 0;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 26px 12px 10px;
-  background: linear-gradient(transparent, rgba(4, 4, 8, 0.9));
-  font-size: 0.92rem;
-}
-
-.category .count { color: var(--muted); font-size: 0.78rem; }
 
 .grid {
   columns: 4 250px;
@@ -394,8 +339,7 @@ LIGHTBOX = """\
 </div>"""
 
 
-def page(title: str, body: str, depth: int, script: str = "") -> str:
-    prefix = "../" * depth
+def page(title: str, body: str, script: str = "") -> str:
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -405,7 +349,7 @@ def page(title: str, body: str, depth: int, script: str = "") -> str:
 <meta name="color-scheme" content="dark">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.0/index.min.css">
-<link rel="stylesheet" href="{prefix}styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="wrap">
@@ -421,43 +365,21 @@ def page(title: str, body: str, depth: int, script: str = "") -> str:
 """
 
 
-def build_index(cats, covers: dict[str, str]) -> str:
-    total = sum(len(images) for _, images, _ in cats)
-    size = sum(s for _, _, s in cats) / 1048576
-    cards = []
-    for name, images, _ in cats:
-        cards.append(
-            f'''  <a class="category" href="{name}/">
-    <img src="thumbs/{name}/{covers[name]}" width="250" height="156" alt="{html.escape(name)}" loading="lazy">
-    <span class="label">{html.escape(name)}<span class="count">{len(images)}</span></span>
-  </a>'''
-        )
-    body = f'''<header>
-  <h1>wallpapers</h1>
-  <p class="sub">{total} images &middot; {size:.0f} MB &middot; {len(cats)} categories</p>
-</header>
-
-<main class="categories">
-{os.linesep.join(cards)}
-</main>
-'''
-    return page("Wallpapers", body, 0)
-
-
-def build_category(name: str, images: list[str], sizes: dict[str, tuple[int, int]]) -> str:
+def build_index(images: list[str], sizes: dict[str, tuple[int, int]]) -> str:
+    size = sum((IMAGES / n).stat().st_size for n in images) / 1048576
     shots = []
     for image in images:
         thumb = f"{Path(image).stem}.{THUMB_EXT}"
         w, h = sizes.get(image, (1920, 1080))
-        full = f"{RAW}/{name}/{image}"
+        full = f"{RAW}/{image}"
         shots.append(
-            f'''  <a href="{html.escape(full)}" data-full="{html.escape(full)}" data-name="{html.escape(name)} {html.escape(image)}">
-    <img src="../thumbs/{name}/{thumb}" width="{w}" height="{h}" alt="{html.escape(name)} {html.escape(image)}" loading="lazy" decoding="async">
+            f'''  <a href="{html.escape(full)}" data-full="{html.escape(full)}" data-name="{html.escape(image)}">
+    <img src="thumbs/{thumb}" width="{w}" height="{h}" alt="{html.escape(image)}" loading="lazy" decoding="async">
   </a>'''
         )
     body = f'''<header>
-  <h1><a href="../index.html">{html.escape(name)}</a></h1>
-  <p class="sub">{len(images)} images &middot; <a href="../index.html">all categories</a></p>
+  <h1>wallpapers</h1>
+  <p class="sub">{len(images)} images &middot; {size:.0f} MB &middot; <a href="https://github.com/{USER}/{REPO}">github</a></p>
 </header>
 
 <main class="grid">
@@ -465,18 +387,18 @@ def build_category(name: str, images: list[str], sizes: dict[str, tuple[int, int
 </main>
 {LIGHTBOX}
 '''
-    return page(f"{name} wallpapers", body, 1, f"<script>{JS}</script>")
+    return page("Wallpapers", body, f"<script>{JS}</script>")
 
 
 def check_site() -> list[str]:
     """Fail the build if a page points at a file that was not generated."""
     missing = []
-    for page in SITE.rglob("index.html"):
-        for ref in re.findall(r'(?:src|href)="([^"]+)"', page.read_text(encoding="utf-8")):
+    for html_page in SITE.rglob("index.html"):
+        for ref in re.findall(r'(?:src|href)="([^"]+)"', html_page.read_text(encoding="utf-8")):
             if ref.startswith(("http://", "https://", "#", "mailto:")):
                 continue
-            if not (page.parent / ref).resolve().exists():
-                missing.append(f"{page.relative_to(SITE)}: {ref}")
+            if not (html_page.parent / ref).resolve().exists():
+                missing.append(f"{html_page.relative_to(SITE)}: {ref}")
     return missing
 
 
@@ -496,26 +418,14 @@ def main() -> int:
                 shutil.rmtree(entry) if entry.is_dir() else entry.unlink()
     SITE.mkdir(exist_ok=True)
 
-    cats = categories()
-    covers = {}
-    made = 0
-    for name, images, _ in cats:
-        paths = [IMAGES / name / image for image in images]
-        for path in paths:
-            thumb = THUMBS / name / f"{path.stem}.{THUMB_EXT}"
-            make_thumb(path, thumb, clean)
-            made += 1
-        covers[name] = f"{Path(images[0]).stem}.{THUMB_EXT}"
+    images = image_files()
+    for image in images:
+        make_thumb(IMAGES / image, THUMBS / f"{Path(image).stem}.{THUMB_EXT}", clean)
 
-    for name, images, _ in cats:
-        sizes = dimensions([IMAGES / name / image for image in images])
-        (SITE / name).mkdir(exist_ok=True)
-        (SITE / name / "index.html").write_text(
-            build_category(name, images, sizes), encoding="utf-8"
-        )
+    sizes = dimensions([IMAGES / image for image in images])
 
     (SITE / "styles.css").write_text(CSS, encoding="utf-8")
-    (SITE / "index.html").write_text(build_index(cats, covers), encoding="utf-8")
+    (SITE / "index.html").write_text(build_index(images, sizes), encoding="utf-8")
     (SITE / ".nojekyll").write_text("", encoding="utf-8")
 
     missing = check_site()
@@ -525,7 +435,7 @@ def main() -> int:
             print("  " + line, file=sys.stderr)
         return 1
 
-    print(f"built {len(cats)} categories, {made} thumbnails ({THUMB_EXT}) -> {SITE}")
+    print(f"built {len(images)} images, {len(images)} thumbnails ({THUMB_EXT}) -> {SITE}")
     print("preview: python3 -m http.server -d _site 8000")
     return 0
 

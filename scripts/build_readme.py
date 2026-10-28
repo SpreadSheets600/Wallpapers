@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Generate README.md and one README.md per category.
+"""Generate README.md for the collection.
 
 Usage:
     python3 scripts/build_readme.py
 
-Previews use the thumbnails published on the ``gh-pages`` branch, so these
-files stay small on GitHub. The workflow runs this after deploying the site.
+Previews use the thumbnails published on the ``gh-pages`` branch, so the file
+stays small on GitHub. The workflow runs this after deploying the site.
 """
 
 from __future__ import annotations
@@ -21,51 +21,43 @@ SITE = f"https://{USER.lower()}.github.io/{REPO}/"
 THUMBS = f"https://raw.githubusercontent.com/{USER}/{REPO}/gh-pages/thumbs"
 
 
-def image_files(category: Path) -> list[str]:
+def image_files() -> list[str]:
     return sorted(
-        (f.name for f in category.iterdir() if f.suffix.lower() in SUFFIXES),
+        (f.name for f in IMAGES.iterdir() if f.suffix.lower() in SUFFIXES),
         key=lambda n: (0, int(Path(n).stem)) if Path(n).stem.isdigit() else (1, n),
     )
 
 
-def categories() -> list[tuple[str, list[str], int]]:
-    result = []
-    for path in sorted(p for p in IMAGES.iterdir() if p.is_dir()):
-        images = image_files(path)
-        if not images:
-            continue
-        size = sum((path / n).stat().st_size for n in images)
-        result.append((path.name, images, size))
-    return result
+def build_root(images: list[str]) -> str:
+    size = sum((IMAGES / n).stat().st_size for n in images) / 1048576
 
-
-def build_root(cats) -> str:
-    total = sum(len(images) for _, images, _ in cats)
-    size = sum(s for _, _, s in cats) / 1048576
-
-    rows = [
-        f'| <img src="{THUMBS}/{name}/{Path(images[0]).stem}.webp" width="180" alt="{name}"> '
-        f"| **[{name}](Wallpapers/{name}/)** | {len(images)} | {s / 1048576:.1f} MB |"
-        for name, images, s in cats
-    ]
+    rows = []
+    for start in range(0, len(images), 4):
+        cells = [
+            f'<a href="Wallpapers/{image}"><img src="{THUMBS}/{Path(image).stem}.webp" '
+            f'width="220" alt="{image}"></a>'
+            for image in images[start:start + 4]
+        ]
+        cells += [""] * (4 - len(cells))
+        rows.append("| " + " | ".join(cells) + " |")
 
     return f"""# wallpapers
 
-A wallpaper collection I actually use, sorted by subject and then by colour so
-every folder flows from one palette into the next.
+A wallpaper collection I actually use, numbered in a stable order so the
+gallery, the README and the folder always agree.
 
-`{total}` images &middot; `{size:.0f} MB` &middot; `{len(cats)}` collections
+`{len(images)}` images &middot; `{size:.0f} MB`
 
 **Gallery: [{SITE.replace('https://', '')}]({SITE})**
 
 The gallery is generated, not hand-written: GitHub Actions builds the
-thumbnails, the READMEs and the static site on every push and publishes them to
+thumbnails, this README and the static site on every push and publishes them to
 the `gh-pages` branch. Clicking a thumbnail on the site opens the full-size
 image from this branch.
 
-## collections
+## wallpapers
 
-| cover | collection | images | size |
+|  |  |  |  |
 |---|---|---|---|
 {chr(10).join(rows)}
 
@@ -75,14 +67,14 @@ image from this branch.
 git clone https://github.com/{USER}/{REPO}.git
 cd {REPO}
 
-# add or delete files under Wallpapers/<Collection>/
+# add or delete files under Wallpapers/
 python3 scripts/organize.py      # HEIC -> JPEG, renumber loose files
 
 git add -A && git commit -m "feat: add wallpapers" && git push
 ```
 
-The push is all you need: the workflow regenerates the READMEs, the thumbnails
-and the site, commits the READMEs back here and force-pushes a fresh `gh-pages`
+The push is all you need: the workflow regenerates the README, the thumbnails
+and the site, commits the README back here and force-pushes a fresh `gh-pages`
 branch.
 
 To preview the site locally (Pillow or ImageMagick needed):
@@ -96,9 +88,9 @@ python3 -m http.server -d _site 8000
 ## layout
 
 ```text
-Wallpapers/<Collection>/<n>.<ext>   the images, numbered in colour order
+Wallpapers/<n>.<ext>                the images, numbered in a stable order
 scripts/build_site.py               thumbnails + site -> _site/ (gh-pages)
-scripts/build_readme.py             this README and the per-collection ones
+scripts/build_readme.py             this README
 scripts/organize.py                 HEIC conversion, renumbering
 .github/workflows/site.yml          build + deploy on push
 ```
@@ -111,39 +103,10 @@ removed, open an issue and it will be taken down.
 """
 
 
-def build_category(name: str, images: list[str]) -> str:
-    size = sum((IMAGES / name / image).stat().st_size for image in images) / 1048576
-    rows = []
-    for start in range(0, len(images), 4):
-        cells = [
-            f'<a href="{image}"><img src="{THUMBS}/{name}/{Path(image).stem}.webp" '
-            f'width="220" alt="{name} {image}"></a>'
-            for image in images[start:start + 4]
-        ]
-        cells += [""] * (4 - len(cells))
-        rows.append("| " + " | ".join(cells) + " |")
-
-    return f"""# {name}
-
-[&larr; all collections](../README.md) &middot; [gallery]({SITE}{name}/)
-
-`{len(images)}` images &middot; `{size:.1f} MB`
-
-|  |  |  |  |
-|---|---|---|---|
-{chr(10).join(rows)}
-
-Every wallpaper belongs to its original creator. See the
-[main README](../README.md#credits) for credits and takedown requests.
-"""
-
-
 def main() -> None:
-    cats = categories()
-    (ROOT / "README.md").write_text(build_root(cats), encoding="utf-8")
-    for name, images, _ in cats:
-        (IMAGES / name / "README.md").write_text(build_category(name, images), encoding="utf-8")
-    print(f"wrote README.md + {len(cats)} category READMEs")
+    images = image_files()
+    (ROOT / "README.md").write_text(build_root(images), encoding="utf-8")
+    print(f"wrote README.md ({len(images)} images)")
 
 
 if __name__ == "__main__":
