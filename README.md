@@ -3,7 +3,7 @@
 A wallpaper collection I actually use, sorted by subject and then by colour so
 every folder flows from one palette into the next.
 
-`167` images &middot; `378 MB` &middot; `14` collections
+`164` images &middot; `357 MB` &middot; `14` collections
 
 **Gallery: [spreadsheets600.github.io/Wallpapers/](https://spreadsheets600.github.io/Wallpapers/)**
 
@@ -17,19 +17,19 @@ image from this branch.
 | cover | collection | images | size |
 |---|---|---|---|
 | <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Abstract/1.webp" width="180" alt="Abstract"> | **[Abstract](Wallpapers/Abstract/)** | 8 | 16.1 MB |
-| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Anime/2.webp" width="180" alt="Anime"> | **[Anime](Wallpapers/Anime/)** | 8 | 33.7 MB |
-| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/City/1.webp" width="180" alt="City"> | **[City](Wallpapers/City/)** | 7 | 3.6 MB |
-| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Cyberpunk/1.webp" width="180" alt="Cyberpunk"> | **[Cyberpunk](Wallpapers/Cyberpunk/)** | 4 | 7.4 MB |
-| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Fantasy/1.webp" width="180" alt="Fantasy"> | **[Fantasy](Wallpapers/Fantasy/)** | 6 | 9.3 MB |
+| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Anime/1.webp" width="180" alt="Anime"> | **[Anime](Wallpapers/Anime/)** | 9 | 37.6 MB |
+| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/City/1.webp" width="180" alt="City"> | **[City](Wallpapers/City/)** | 8 | 4.6 MB |
+| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Cyberpunk/1.webp" width="180" alt="Cyberpunk"> | **[Cyberpunk](Wallpapers/Cyberpunk/)** | 4 | 7.1 MB |
+| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Fantasy/1.webp" width="180" alt="Fantasy"> | **[Fantasy](Wallpapers/Fantasy/)** | 6 | 8.9 MB |
 | <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Flowers/1.webp" width="180" alt="Flowers"> | **[Flowers](Wallpapers/Flowers/)** | 43 | 78.4 MB |
 | <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Manga/1.webp" width="180" alt="Manga"> | **[Manga](Wallpapers/Manga/)** | 7 | 11.1 MB |
 | <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Minimal/1.webp" width="180" alt="Minimal"> | **[Minimal](Wallpapers/Minimal/)** | 16 | 6.6 MB |
-| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Mountain/1.webp" width="180" alt="Mountain"> | **[Mountain](Wallpapers/Mountain/)** | 4 | 11.0 MB |
-| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Nature/1.webp" width="180" alt="Nature"> | **[Nature](Wallpapers/Nature/)** | 23 | 56.6 MB |
+| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Mountain/1.webp" width="180" alt="Mountain"> | **[Mountain](Wallpapers/Mountain/)** | 10 | 28.0 MB |
+| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Nature/1.webp" width="180" alt="Nature"> | **[Nature](Wallpapers/Nature/)** | 15 | 21.5 MB |
 | <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Photography/1.webp" width="180" alt="Photography"> | **[Photography](Wallpapers/Photography/)** | 5 | 3.2 MB |
 | <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Sea/1.webp" width="180" alt="Sea"> | **[Sea](Wallpapers/Sea/)** | 6 | 15.1 MB |
-| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Space/1.webp" width="180" alt="Space"> | **[Space](Wallpapers/Space/)** | 4 | 23.3 MB |
-| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/WuWa/1.webp" width="180" alt="WuWa"> | **[WuWa](Wallpapers/WuWa/)** | 26 | 103.0 MB |
+| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/Space/1.webp" width="180" alt="Space"> | **[Space](Wallpapers/Space/)** | 5 | 25.3 MB |
+| <img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/WuWa/2.webp" width="180" alt="WuWa"> | **[WuWa](Wallpapers/WuWa/)** | 22 | 93.7 MB |
 
 ## adding or removing wallpapers
 
