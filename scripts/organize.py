@@ -18,13 +18,14 @@ def convert_heic(path: Path):
         check=True,
     )
     path.unlink()
-    print(f"converted {path.name} -> {target.name}")
+    print(f"Converted {path.name} -> {target.name}")
+
     return target
 
 
-def main() -> int:
+def main():
     if not IMAGES.is_dir():
-        print(f"no Wallpapers/ directory in {ROOT}", file=sys.stderr)
+        print(f"No Wallpapers Directory In {ROOT}", file=sys.stderr)
         return 1
 
     for file in sorted(IMAGES.iterdir()):
@@ -32,11 +33,14 @@ def main() -> int:
             convert_heic(file)
 
     files = [
-        f for f in sorted(IMAGES.iterdir())
+        f
+        for f in sorted(IMAGES.iterdir())
         if f.is_file() and f.suffix.lower() in SUFFIXES
     ]
+
     numbered = [f for f in files if f.stem.isdigit()]
     loose = [f for f in files if not f.stem.isdigit()]
+
     if not loose:
         return 0
 
@@ -44,6 +48,7 @@ def main() -> int:
     for file in loose:
         target = IMAGES / f"{next_number}{file.suffix.lower()}"
         file.rename(target)
+
         print(f"{file.name} -> {target.name}")
         next_number += 1
 
