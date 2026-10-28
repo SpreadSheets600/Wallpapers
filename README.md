@@ -1,18 +1,19 @@
 # wallpapers
 
-A wallpaper collection I actually use, numbered in a stable order so the
+A wallpaper collection I actually use, curated over time, numbered in a stable order so the
 gallery, the README and the folder always agree.
 
-`166` images &middot; `361 MB`
+### `166` Images &middot; `361 MB`
 
 **Gallery: [spreadsheets600.github.io/Wallpapers/](https://spreadsheets600.github.io/Wallpapers/)**
 
-The gallery is generated, not hand-written: GitHub Actions builds the
+> [!NOTE] 
+> The gallery is generated - GitHub Actions builds the
 thumbnails, this README and the static site on every push and publishes them to
 the `gh-pages` branch. Clicking a thumbnail on the site opens the full-size
 image from this branch.
 
-## wallpapers
+## Wallpapers
 
 |  |  |  |  |
 |---|---|---|---|
@@ -59,7 +60,7 @@ image from this branch.
 | <a href="Wallpapers/161.jpg"><img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/161.webp" width="220" alt="161.jpg"></a> | <a href="Wallpapers/162.jpg"><img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/162.webp" width="220" alt="162.jpg"></a> | <a href="Wallpapers/163.jpg"><img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/163.webp" width="220" alt="163.jpg"></a> | <a href="Wallpapers/164.jpg"><img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/164.webp" width="220" alt="164.jpg"></a> |
 | <a href="Wallpapers/165.jpg"><img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/165.webp" width="220" alt="165.jpg"></a> | <a href="Wallpapers/166.jpg"><img src="https://raw.githubusercontent.com/SpreadSheets600/Wallpapers/gh-pages/thumbs/166.webp" width="220" alt="166.jpg"></a> |  |  |
 
-## adding or removing wallpapers
+## Adding Or Removing Wallpapers
 
 ```bash
 git clone https://github.com/SpreadSheets600/Wallpapers.git
@@ -80,21 +81,13 @@ To preview the site locally (Pillow or ImageMagick needed):
 ```bash
 python3 -m pip install --user pillow
 python3 scripts/build_site.py
+
 python3 -m http.server -d _site 8000
 ```
 
-## layout
+## Credits
 
-```text
-Wallpapers/<n>.<ext>                the images, numbered in a stable order
-scripts/build_site.py               thumbnails + site -> _site/ (gh-pages)
-scripts/build_readme.py             this README
-scripts/organize.py                 HEIC conversion, renumbering
-.github/workflows/site.yml          build + deploy on push
-```
-
-## credits
-
-I do not own any of these images; everything belongs to the respective artists
+> [!NOTE] 
+> I do not own any of these images. Everything belongs to the respective artists
 and is collected for personal desktop use. If you own an image and want it
 removed, open an issue and it will be taken down.
