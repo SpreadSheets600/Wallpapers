@@ -1,30 +1,18 @@
-#!/usr/bin/env python3
-"""Tidy the collection: convert HEIC, renumber loose images.
-
-Usage:
-    python3 scripts/organize.py
-
-Every image in ``Wallpapers/`` ends up numbered 1..n so the directory listing,
-the README and the site stay in sync. Existing numbers are kept and new files
-get the next free number, in the order they are found. HEIC/HEIF files are
-converted to JPEG because most desktop environments cannot set them as a
-wallpaper.
-"""
-
-from __future__ import annotations
-
-import subprocess
 import sys
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
 IMAGES = ROOT / "Wallpapers"
+
 SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp"}
 HEIC = {".heic", ".heif"}
 
 
-def convert_heic(path: Path) -> Path:
+def convert_heic(path: Path):
     target = path.with_suffix(".jpg")
+
     subprocess.run(
         ["magick", f"{path}[0]", "-auto-orient", "-quality", "92", str(target)],
         check=True,

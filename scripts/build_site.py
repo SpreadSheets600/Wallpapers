@@ -6,6 +6,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
+
 try:
     from PIL import Image, ImageOps  # Check If Pillow Is Installed Or Not
 except ModuleNotFoundError:
@@ -30,67 +31,81 @@ IM = shutil.which("magick") or shutil.which("convert")
 IDENTIFY = shutil.which("identify")
 
 
-def image_files() -> list[str]:
+def image_files():
     return sorted(
         (f.name for f in IMAGES.iterdir() if f.suffix.lower() in SUFFIXES),
         key=lambda n: (0, int(Path(n).stem)) if Path(n).stem.isdigit() else (1, n),
     )
 
 
-def dimensions(paths: list[Path]) -> dict[str, tuple[int, int]]:
+def dimensions(paths: list[Path]):
     if not paths:
         return {}
+
     sizes = {}
+
     if Image is not None:
         for path in paths:
             with Image.open(path) as im:
                 sizes[path.name] = im.size
+
         return sizes
     if not IDENTIFY:
         return {}
+
     out = subprocess.run(
         [IDENTIFY, "-format", "%w %h\n", *map(str, paths)],
         capture_output=True,
         text=True,
         check=True,
     ).stdout.split()
+
     for path, w, h in zip(paths, out[0::2], out[1::2]):
         sizes[path.name] = (int(w), int(h))
+
     return sizes
 
 
-def webp_supported() -> bool:
+def webp_supported():
     if Image is not None:
         from PIL import features
 
         return features.check("webp")
     if not IM:
         return False
-    out = subprocess.run([IM, "-list", "format"], capture_output=True, text=True)
+
+    out = subprocess.run(
+        [IM, "-list", "format"], capture_output=True, text=True, check=False
+    )
+
     for line in out.stdout.splitlines():
         if line.strip().upper().startswith("WEBP"):
             return "rw" in line or " rw" in line
+
     return False
 
 
 THUMB_EXT = "webp" if webp_supported() else "jpg"
 
 
-def make_thumb(src: Path, dst: Path, clean: bool) -> None:
+def make_thumb(src: Path, dst: Path, clean: bool):
     if not clean and dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
         return
+
     dst.parent.mkdir(parents=True, exist_ok=True)
 
     if Image is not None:
         with Image.open(src) as im:
             im = ImageOps.exif_transpose(im)
-            im.thumbnail((THUMB_WIDTH, THUMB_WIDTH), Image.LANCZOS)
+            im.thumbnail((THUMB_WIDTH, THUMB_WIDTH), Image.Resampling.LANCZOS)
+
             if im.mode not in ("RGB", "RGBA"):
                 im = im.convert("RGBA" if im.mode in ("P", "LA", "PA") else "RGB")
             if THUMB_EXT == "webp":
                 im.save(dst, "WEBP", quality=78, method=4)
             else:
                 im.convert("RGB").save(dst, "JPEG", quality=82, optimize=True)
+
         return
 
     quality = "78" if THUMB_EXT == "webp" else "82"
@@ -106,8 +121,8 @@ def make_thumb(src: Path, dst: Path, clean: bool) -> None:
             quality,
             str(dst),
         ],
-        check=True,
         capture_output=True,
+        check=True,
     )
 
 
@@ -347,11 +362,14 @@ def page(title: str, body: str, script: str = "") -> str:
 <div class="wrap">
 {body}
 <footer>
-  <span>All wallpapers belong to their original creators.</span>
-  <span><a href="https://github.com/{USER}/{REPO}">github.com/{USER}/{REPO}</a></span>
+  <span>SpreadSheets600</span>
+  <span><a href="https://github.com/{USER}/{REPO}"><ion-icon name="logo-github"></ion-icon></a></span>
 </footer>
 </div>
 {script}
+
+<script type="module" src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
 """
@@ -382,21 +400,23 @@ def build_index(images: list[str], sizes: dict[str, tuple[int, int]]) -> str:
     return page("Wallpapers", body, f"<script>{JS}</script>")
 
 
-def check_site() -> list[str]:
-    """Fail the build if a page points at a file that was not generated."""
+def check_site():
     missing = []
+
     for html_page in SITE.rglob("index.html"):
         for ref in re.findall(
             r'(?:src|href)="([^"]+)"', html_page.read_text(encoding="utf-8")
         ):
             if ref.startswith(("http://", "https://", "#", "mailto:")):
                 continue
+
             if not (html_page.parent / ref).resolve().exists():
                 missing.append(f"{html_page.relative_to(SITE)}: {ref}")
+
     return missing
 
 
-def main() -> int:
+def main():
     if Image is None and not IM:
         print("need Pillow (pip install pillow) or ImageMagick", file=sys.stderr)
         return 1
@@ -410,6 +430,7 @@ def main() -> int:
                 if entry.name == "thumbs":
                     continue
                 shutil.rmtree(entry) if entry.is_dir() else entry.unlink()
+
     SITE.mkdir(exist_ok=True)
 
     images = image_files()
@@ -433,6 +454,7 @@ def main() -> int:
         f"built {len(images)} images, {len(images)} thumbnails ({THUMB_EXT}) -> {SITE}"
     )
     print("preview: python3 -m http.server -d _site 8000")
+
     return 0
 
 
