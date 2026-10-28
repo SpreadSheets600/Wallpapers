@@ -1,32 +1,9 @@
-#!/usr/bin/env python3
-"""Build the gallery into ``_site/``.
-
-Usage:
-    python3 scripts/build_site.py            # build
-    python3 scripts/build_site.py --clean    # rebuild thumbnails from scratch
-
-The output is what gets published to the ``gh-pages`` branch:
-
-    _site/index.html            thumbnail grid with a lightbox
-    _site/styles.css            shared stylesheet
-    _site/thumbs/*.webp         480 px thumbnails
-
-Full-size images are not copied. They are linked straight from the repository
-through raw.githubusercontent.com, so the site stays small and the thumbnails
-are the only thing a visitor downloads while browsing.
-
-Thumbnails are made with Pillow (``pip install pillow``), or with
-ImageMagick (``magick``/``convert``) when Pillow is not installed.
-"""
-
-from __future__ import annotations
-
-import html
 import os
 import re
+import sys
+import html
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -71,7 +48,9 @@ def dimensions(paths: list[Path]) -> dict[str, tuple[int, int]]:
         return {}
     out = subprocess.run(
         [IDENTIFY, "-format", "%w %h\n", *map(str, paths)],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     ).stdout.split()
     for path, w, h in zip(paths, out[0::2], out[1::2]):
         sizes[path.name] = (int(w), int(h))
@@ -81,6 +60,7 @@ def dimensions(paths: list[Path]) -> dict[str, tuple[int, int]]:
 def webp_supported() -> bool:
     if Image is not None:
         from PIL import features
+
         return features.check("webp")
     if not IM:
         return False
@@ -113,9 +93,19 @@ def make_thumb(src: Path, dst: Path, clean: bool) -> None:
 
     quality = "78" if THUMB_EXT == "webp" else "82"
     subprocess.run(
-        [IM, f"{src}[0]", "-auto-orient", "-thumbnail", f"{THUMB_WIDTH}x{THUMB_WIDTH}>",
-         "-strip", "-quality", quality, str(dst)],
-        check=True, capture_output=True,
+        [
+            IM,
+            f"{src}[0]",
+            "-auto-orient",
+            "-thumbnail",
+            f"{THUMB_WIDTH}x{THUMB_WIDTH}>",
+            "-strip",
+            "-quality",
+            quality,
+            str(dst),
+        ],
+        check=True,
+        capture_output=True,
     )
 
 
@@ -377,7 +367,7 @@ def build_index(images: list[str], sizes: dict[str, tuple[int, int]]) -> str:
     <img src="thumbs/{thumb}" width="{w}" height="{h}" alt="{html.escape(image)}" loading="lazy" decoding="async">
   </a>'''
         )
-    body = f'''<header>
+    body = f"""<header>
   <h1>wallpapers</h1>
   <p class="sub">{len(images)} images &middot; {size:.0f} MB &middot; <a href="https://github.com/{USER}/{REPO}">github</a></p>
 </header>
@@ -386,7 +376,7 @@ def build_index(images: list[str], sizes: dict[str, tuple[int, int]]) -> str:
 {os.linesep.join(shots)}
 </main>
 {LIGHTBOX}
-'''
+"""
     return page("Wallpapers", body, f"<script>{JS}</script>")
 
 
@@ -394,7 +384,9 @@ def check_site() -> list[str]:
     """Fail the build if a page points at a file that was not generated."""
     missing = []
     for html_page in SITE.rglob("index.html"):
-        for ref in re.findall(r'(?:src|href)="([^"]+)"', html_page.read_text(encoding="utf-8")):
+        for ref in re.findall(
+            r'(?:src|href)="([^"]+)"', html_page.read_text(encoding="utf-8")
+        ):
             if ref.startswith(("http://", "https://", "#", "mailto:")):
                 continue
             if not (html_page.parent / ref).resolve().exists():
@@ -435,7 +427,9 @@ def main() -> int:
             print("  " + line, file=sys.stderr)
         return 1
 
-    print(f"built {len(images)} images, {len(images)} thumbnails ({THUMB_EXT}) -> {SITE}")
+    print(
+        f"built {len(images)} images, {len(images)} thumbnails ({THUMB_EXT}) -> {SITE}"
+    )
     print("preview: python3 -m http.server -d _site 8000")
     return 0
 
