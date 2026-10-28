@@ -363,13 +363,10 @@ def page(title: str, body: str, script: str = "") -> str:
 {body}
 <footer>
   <span>SpreadSheets600</span>
-  <span><a href="https://github.com/{USER}/{REPO}"><ion-icon name="logo-github"></ion-icon></a></span>
+  <span><a href="https://spreadsheets600.buzz">Website</span>
 </footer>
 </div>
 {script}
-
-<script type="module" src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
 """
