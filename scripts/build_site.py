@@ -5,9 +5,11 @@ import html
 import shutil
 import subprocess
 from pathlib import Path
+from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGES = ROOT / "Wallpapers"
+
 SITE = ROOT / "_site"
 THUMBS = SITE / "thumbs"
 
@@ -19,10 +21,9 @@ RAW = f"https://raw.githubusercontent.com/{USER}/{REPO}/{BRANCH}/Wallpapers"
 THUMB_WIDTH = 480
 SUFFIXES = (".jpg", ".jpeg", ".png", ".webp", ".gif")
 
-try:  # Pillow is what CI uses: a wheel, no apt step to hang on.
-    from PIL import Image, ImageOps
-except ImportError:  # local fallback, ImageMagick
-    Image = None
+
+# Fallback To Magick If pillow Not Present
+Image = None
 
 IM = shutil.which("magick") or shutil.which("convert")
 IDENTIFY = shutil.which("identify")
