@@ -1,0 +1,19 @@
+[project]
+name = "wallpapers"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "SpreadSheets600", email = "dev.spreadsheets600@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "pillow>=13.0.0",
+]
+
+[project.scripts]
+wallpapers = "wallpapers:main"
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14.0"]
+build-backend = "uv_build"

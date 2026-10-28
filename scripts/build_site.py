@@ -5,7 +5,11 @@ import html
 import shutil
 import subprocess
 from pathlib import Path
-from PIL import Image, ImageOps
+
+try:
+    from PIL import Image, ImageOps  # Check If Pillow Is Installed Or Not
+except ModuleNotFoundError:
+    Image = None  # Fallback To Magick
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGES = ROOT / "Wallpapers"
@@ -16,14 +20,11 @@ THUMBS = SITE / "thumbs"
 USER = "SpreadSheets600"
 REPO = "Wallpapers"
 BRANCH = "master"
+
 RAW = f"https://raw.githubusercontent.com/{USER}/{REPO}/{BRANCH}/Wallpapers"
 
 THUMB_WIDTH = 480
 SUFFIXES = (".jpg", ".jpeg", ".png", ".webp", ".gif")
-
-
-# Fallback To Magick If pillow Not Present
-Image = None
 
 IM = shutil.which("magick") or shutil.which("convert")
 IDENTIFY = shutil.which("identify")
